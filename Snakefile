@@ -31,8 +31,8 @@ rule all:
         #expand("DATA/COUNTS/{samples}/abundance.tsv",samples=SAMPLES),
         #expand("RESULTS/QCOUT/RSEQC/readDistribution_{samples}.txt",samples=SAMPLES),
         #expand("DATA/ALIGNED/{samples}/out/aligned.log",samples=SAMPLES),
-        #"ANALYSIS/de_gsea_analysis.html",
-        #"ANALYSIS_CONTAM/de_gsea_panethContam.html"
+        #"RESULTS/OLD_VS_YOUNG//de_gsea_analysis.html",
+        #"RESULTS/PANETH_CONTAM/de_gsea_panethContam.html"
 
 rule downloadGenome:
     """
@@ -261,16 +261,16 @@ rule deGseaAnalysis:
     """
     input:
         #expand("DATA/COUNTS/{samples}/abundance.tsv", samples=SAMPLES),
-        de = "ANALYSIS/de_gsea_analysis.R",
-        contam = "ANALYSIS_CONTAM/de_gsea_panethContam.R"
+        de = "CODE/de_gsea_analysis.R",
+        contam = "CODE/de_gsea_panethContam.R"
     output:
-        "ANALYSIS/de_gsea_analysis.html",
-        "ANALYSIS_CONTAM/de_gsea_panethContam.html"
+        "RESULTS/OLD_VS_YOUNG/de_gsea_analysis.html",
+        "RESULTS/PANETH_CONTAM/de_gsea_panethContam.html"
     shell:
         """
-        mkdir ANALYSIS/RESULTS ANALYSIS/RESULTS/DE ANALYSIS/RESULTS/GSEA ANALYSIS_CONTAM/RESULTS ANALYSIS_CONTAM/RESULTS/DE ANALYSIS_CONTAM/RESULTS/GSEA 
-        Rscript -e 'rmarkdown::render({input.de})'
-        Rscript -e 'rmarkdown::render({input.contam})'
+        mkdir RESULTS/OLD_VS_YOUNG RESULTS/OLD_VS_YOUNG/DE RESULTS/OLD_VS_YOUNG/GSEA RESULTS/PANETH_CONTAM RESULTS/PANETH_CONTAM/DE RESULTS/PANETH_CONTAM/GSEA 
+        Rscript -e 'rmarkdown::render({input.de}, output_file={output[0]})'
+        Rscript -e 'rmarkdown::render({input.contam}, output_file={output[1]})'
         """
 
 rule generate_rulegraph:
