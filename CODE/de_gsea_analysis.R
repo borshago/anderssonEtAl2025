@@ -71,7 +71,7 @@ pheatmap(sampleDistMatrix,
          clustering_distance_cols=sampleDists,
          col=colors)
          
-pdf("RESULTS/sampleCorrelationHeatmap.pdf",6,5)
+pdf("RESULTS/OLD_VS_YOUNG/sampleCorrelationHeatmap.pdf",6,5)
 pheatmap(sampleDistMatrix,
          clustering_distance_rows=sampleDists,
          clustering_distance_cols=sampleDists,
@@ -89,7 +89,7 @@ ggplot(pcaData, aes(PC1, PC2, color=population, shape=mouse)) +
   ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
   coord_fixed()
   
-pdf("RESULTS/pca.pdf",5,5)
+pdf("RESULTS/OLD_VS_YOUNG/pca.pdf",5,5)
 ggplot(pcaData, aes(PC1, PC2, color=population, shape=mouse)) +
   geom_point(size=3) + scale_shape_manual(values = 1:nlevels(sampleTable$mouse)) +
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
@@ -110,7 +110,7 @@ head(sort(pcaLoadings[,2],decreasing=T),40)
 
 boxplot(log10(assays(dds)[["cooks"]]), range=0, las=2)
 
-pdf("RESULTS/cooks.pdf",5,5)
+pdf("RESULTS/OLD_VS_YOUNG/cooks.pdf",5,5)
 boxplot(log10(assays(dds)[["cooks"]]), range=0, las=2)
 dev.off()
 
@@ -118,7 +118,7 @@ dev.off()
 
 plotDispEsts(dds)
 
-pdf("RESULTS/dispersions.pdf",5,5)
+pdf("RESULTS/OLD_VS_YOUNG/dispersions.pdf",5,5)
 plotDispEsts(dds)
 dev.off()
 
@@ -165,7 +165,7 @@ rowData(sce)$symbol <- gnames$external_gene_name[match(rowData(sce)$symbol,gname
 
 # Plot cumulative gene contribution
 
-pdf("RESULTS/scaterPlot.pdf",10,5)
+pdf("RESULTS/OLD_VS_YOUNG/scaterPlot.pdf",10,5)
 plotScater(sce,block1="group",colour_by = "mouse",nfeatures=1000)
 dev.off()
 
@@ -201,11 +201,11 @@ res <- res[order(res$padj),]
 
 # Save the results table
 
-write.table(res,"RESULTS/degs.txt",quote = F,sep = "\t",row.names = T,col.names = NA)
+write.table(res,"RESULTS/OLD_VS_YOUNG/degs.txt",quote = F,sep = "\t",row.names = T,col.names = NA)
 
 # Visualize expression of DE genes
 
-#res <- read.table("RESULTS/degs.txt",header=T,stringsAsFactors=F,sep="\t",row.names=1)
+#res <- read.table("RESULTS/OLD_VS_YOUNG/degs.txt",header=T,stringsAsFactors=F,sep="\t",row.names=1)
 degs <- rownames(res)[!is.na(res$padj) & res$padj <0.1]
 degSymbols <- res$symbol[rownames(res) %in% degs]
 
@@ -214,7 +214,7 @@ for (i in 1:length(degs)) {
 d <- plotCounts(dds, gene=degs[i], intgroup="population",main=degSymbols[i],returnData=TRUE)
 d$mouse <- dds$mouse
 
-pdf(paste0("RESULTS/DE/",degSymbols[i],"_normcounts.pdf"),6,4)
+pdf(paste0("RESULTS/OLD_VS_YOUNG/DE/",degSymbols[i],"_normcounts.pdf"),6,4)
 print(ggplot(d, aes(x=population, y=count)) + geom_point(aes(shape=mouse, color=population),position=position_jitter(w=0.05,h=0),size=3) + ggtitle(degSymbols[i]) + geom_line(aes(group = mouse),size=0.1) + ylab("Normalized counts"))
 dev.off()
 
@@ -297,14 +297,14 @@ gseaRes <- camera(voomE,idxsE,dE,use.ranks=T)
 
 # Save results
 
-write.table(gseaRes,"RESULTS/GSEA/gsea_camera_results.txt",quote = F,sep = "\t",row.names = T,col.names = NA)
+write.table(gseaRes,"RESULTS/OLD_VS_YOUNG/GSEA/gsea_camera_results.txt",quote = F,sep = "\t",row.names = T,col.names = NA)
 
 
 ### Top candidates and visualization ###
 
 #library(limma)
-#gseaRes <- read.table("RESULTS/GSEA/gsea_camera_results.txt",stringsAsFactors=F)
-#res <- read.table("RESULTS/degs.txt",stringsAsFactors=F)
+#gseaRes <- read.table("RESULTS/OLD_VS_YOUNG/GSEA/gsea_camera_results.txt",stringsAsFactors=F)
+#res <- read.table("RESULTS/OLD_VS_YOUNG/degs.txt",stringsAsFactors=F)
 
 # List top gene set candidates
 
@@ -333,7 +333,7 @@ for (i in 1:length(genesetsDown)) {
 leading <- c(leadingUp,leadingDown)
 
 {
-sink("RESULTS/GSEA/gsea_topCandidates.txt")
+sink("RESULTS/OLD_VS_YOUNG/GSEA/gsea_topCandidates.txt")
 print(leading)
 sink()
 }
@@ -349,8 +349,7 @@ resIdxs <- resIdxs[lengths(resIdxs)>0]
 gsets <- c(genesetsDown,genesetsUp,mlist)
 
 for (i in 1:length(gsets)) {
-  pdf(paste0("RESULTS/GSEA/geneset",i,"_stat.pdf"),5,4)
+  pdf(paste0("RESULTS/OLD_VS_YOUNG/GSEA/geneset",i,"_stat.pdf"),5,4)
   barcodeplot(res$stat,index = unlist(resIdxs[names(gsets[i])]),main=strwrap(names(gsets[i])),cex.main=0.5)
   dev.off()
 }
-
