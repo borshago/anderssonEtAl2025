@@ -20,6 +20,7 @@ The scripts expect the following directory structure:
   ├─ GENOME/
   │  ├─ STAR/
   ├─ PROCESSED/
+  LOGS/
   RESULTS/
   ├─ OLD_VS_YOUNG/
   │  ├─ DE/
