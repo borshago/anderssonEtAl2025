@@ -29,6 +29,5 @@ The scripts expect the following directory structure:
   │  ├─ GSEA/
   ├─ QCOUT/
   │  ├─ RSEQC/
-  environment.yml
   Snakefile
 ```
