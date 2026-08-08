@@ -12,6 +12,7 @@ Contents:
 
 The scripts expect the following directory structure:
 
+```
   CODE/
   DATA/
   ├─ ALIGNED/
@@ -30,3 +31,4 @@ The scripts expect the following directory structure:
   │  ├─ RSEQC/
   environment.yml
   Snakefile
+```
